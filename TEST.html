@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <title>해커스 교육그룹</title>
+    <!-- js -->
+    <script src="https://myclass.hackers.com/js/plugins/jquery-1.12.4.min.js"></script>
+    <script src="https://myclass.hackers.com/js/plugins/jquery-ui-1.21.1/jquery-ui.min.js"></script>
+    <!--ScrollMagic-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/animation.gsap.js"></script>
+    <script>
+        $(document).ready(function() {
+            //navigation
+            function scrollToSection(event) {
+                event.preventDefault();
+                var $section = $($(this).attr('href'));
+
+                $('html, body').animate({
+                    scrollTop: $section.offset().top
+                }, 500);
+
+            }
+            $('[data-scroll]').on('click', scrollToSection);
+
+            //video play
+            var media = $('video').not("[autoplay='autoplay']");
+
+            function checkMedia(){
+                var scrollTop = $(window).scrollTop();
+                var scrollBottom = $(window).scrollTop() + $(window).height();
+
+                media.each(function() {
+                    var yTopMedia = $(this).offset().top;
+                    var yBottomMedia = $(this).height() + yTopMedia;
+                    var image = $(".img").children('img');
+
+                    if(scrollTop < yBottomMedia && scrollBottom > yTopMedia+500){
+                        $(this)[0].play();
+                        setTimeout(function(){ //2초 뒤 이미지 변경
+                            image.attr("src", image.attr("src").replace("1","2"));
+                        }, 2000);
+                    } else {
+                        $(this)[0].pause();
+                    }
+                });
+            }
+            $(document).on('scroll', checkMedia);
+
+            //teacher-wrap
+            $(document).ready(function() {
+                var tcCont = $(".teacher-wrap");
+
+                $(".teacher-wrap .btn-open").on('click', function() {
+                    tcCont.toggleClass("open");
+                    if(tcCont.hasClass("open")){
+                        $(".left-area").animate({ 'left' : -82.6 + '%'}, 1000);
+                        $(".right-area").animate({ 'right' : 0 + '%',"width" : 100 + "%"}, 1000);
+                    }else{
+                        $(".left-area").animate({ 'left' : 0 + '%'}, 1000);
+                        $(".right-area").animate({ 'right' : 0 + '%', 'width' : 17.4 + '%'}, 1000);
+                    }
+                });
+            });
+
+            //scroll시 텍스트 fadein
+            var ctrl = new ScrollMagic.Controller();
+
+            $(".fadeCont").each(function(i) {
+                var inner = $(this).find(".fadeTxt");
+                var tl = new TimelineMax();
+
+                tl.from(inner, 0.65, { yPercent: 110, ease: Back.easeOut });
+
+                new ScrollMagic.Scene({
+                    reverse: true, //반복
+                    triggerElement: this,
+                    triggerHook: 0.1 //뷰포트 기준 0이 최상단 <-> 10이 최하단
+                    //duration: "100%", // use full viewport
+                })
+
+                .setTween(tl)
+                .addTo(ctrl);
+            });
+            //text fadeIn
+            // var scrollArray = [];
+            // var scrollContent = document.querySelectorAll('.section');
+            // for(var i = 0; i<scrollContent.length; i++){
+            //     var mypos = scrollContent[i].offsetTop;
+            //     scrollArray.push(mypos)
+            // }
+            //
+            // $(window).scroll(function () {
+            //     var wtop = $(this).scrollTop();
+            //
+            //     for(var pos = 0; pos<scrollArray.length; pos++){
+            //         var hi = $('.section').eq(pos).outerHeight();
+            //
+            //         if(wtop+hi/2>scrollArray[pos] ){
+            //             $('.section').eq(pos).find(".fadeTxt").fadeIn(500);
+            //         }else if(wtop<scrollArray[pos]){
+            //             $('.section').eq(pos).find(".fadeTxt").fadeOut(500);
+            //         }
+            //     }
+            // });
+
+            //scroll Magic
+            var controller = new ScrollMagic.Controller(); // init
+
+            var wipeAnimation = new TimelineMax() // move
+                .fromTo("section.panel.turqoise", 1, {x: "100%"}, {x: "0%", ease: Linear.easeNone})
+                .fromTo("section.panel.green",    1, {x: "100%"}, {x: "0%", ease: Linear.easeNone})
+                .fromTo("section.panel.bordeaux", 1, {x: "100%"}, {x: "0%", ease: Linear.easeNone});
+
+            new ScrollMagic.Scene({ // create scene to pin and link animation
+                triggerElement: "#pinContainer",
+                triggerHook: "onLeave",
+                duration: "300%"
+            })
+
+            .setPin("#pinContainer")
+            .setTween(wipeAnimation)
+            .addTo(controller);
+        });
+
+        //자주 묻는 질문 롤링
+        var rolling_list = setInterval(function() {
+
+            var _this = $(".faq-wrap ul");
+            var _li = _this.children("li");
+            var _on = $(".faq-wrap ul li.on");
+            var _first = _li.first();
+            var _idx = _on.index();
+
+            _this.append(_first.clone());
+            _first.animate({
+                marginTop:"-40px"}, 200, function(){
+                _this.css("margin-top","0px");
+                _first.remove();
+            });
+
+            if(_li.hasClass('on')){
+                _on.next().attr('class','on').siblings().removeClass('on');
+                if(_idx == 5){
+                    _first.addClass('on').siblings().removeClass('on');
+                    _idx = 0;
+                }
+            }
+
+        }, 10000);
+    </script>
+
+</head>
+ <body>
+ <div class="content">
+     <section id="num1" class="section">
+         <img src="https://cpa.hackers.com/files/cpa/files/banner/c0f7fc8dc114acc2ed403aa9365a567d.jpg" alt="">
+     </section>
+     <section id="num2" class="section">
+         <strong class="fadeTxt">TEST</strong>
+         <img src="https://gscdn.hackers.co.kr/champ/img/chobo/main_re/v11/level_img.jpg" alt="">
+     </section>
+     <section id="num3" class="section">
+         <strong class="fadeTxt">TEST2</strong>
+         <img src="http://www.hackers.com/images/main/renew/first_hackers_re.png" alt="">
+     </section>
+
+     <section id="num4" class="section video">
+         <strong class="fadeTxt">TEST3</strong>
+         <video loop="" muted="">
+             <source src="http://cdndown.hackers.com/oap/mp4/191106_hackersdot_banner_1.mp4" type="video/mp4">
+         </video>
+         <div class="bg"></div>
+     </section>
+
+     <div class="teacher-wrap fadeCont"><!--fadeTxt 사용시 fadeCont 클래스 추가 / btn-open 클릭시 "open" 클래스 추가됨-->
+         <div class="left-area">
+             <div class="inner-box">
+                 <video loop="" muted="">
+                     <source src="http://cdndown.hackers.com/oap/mp4/191106_hackersdot_banner_1.mp4" type="video/mp4">
+                 </video>
+                 <div class="fadeTxt img">
+                     <img src="https://gscdn.hackers.co.kr/star/img/main/img_tc_txt01.png" alt="">
+                 </div>
+             </div>
+         </div>
+         <div class="right-area">
+             <div class="inner-box">
+                 <a href="#;" class="btn-open"></a>
+                 <img src="https://gscdn.hackers.co.kr/star/img/main/tc_right_area.png" alt="" usemap="#tc_r" />
+                 <map name="tc_r">
+                     <area alt="보러가기" shape="rect" coords="524, 349, 701, 415" href="#;" />
+                 </map>
+             </div>
+         </div>
+     </div>
+
+     <section id="num5" class="section">
+         <img src="https://gscdn.hackers.co.kr/champ/files/banner/imglib_files/banner/imglib/toeic_teacher_1048x270_.jpg" alt="">
+     </section>
+
+     <div id="pinContainer">
+         <section class="panel blue">
+             <b>ONE</b>
+         </section>
+         <section class="panel turqoise">
+             <b>TWO</b>
+         </section>
+         <section class="panel green">
+             <b>THREE</b>
+         </section>
+         <section class="panel bordeaux">
+             <b>FOUR</b>
+         </section>
+     </div>
+
+     <section id="num6" class="section">
+         <img src="http://www.hackers.com/images/main/renew/first_hackers_re.png" alt="">
+     </section>
+     <section id="num7" class="section">
+         <img src="https://gscdn.hackers.co.kr/champ/files/banner/imglib_files/banner/imglib/toeic_teacher_1048x270_.jpg" alt="">
+     </section>
+
+     <div class="faq-wrap">
+         <div class="inner-box">
+             <div class="title-wrap">
+                 <h2 class="title-type">자주 묻는 질문</h2>
+             </div>
+             <ul>
+                 <li>
+                     <p>윈도우 XP에서는 강의 재생이 안되나요?<i></i></p>
+                 </li>
+                 <li class="on">
+                     <p>일시정지 / 수강연장 / 재수강에 대해 알려주세요<i></i></p>
+                 </li>
+                 <li>
+                     <p>맥어드레스를 초기화하고 싶어요<i></i></p>
+                 </li>
+                 <li>
+                     <p>환불 요청서 취소방법이 궁금해요<i></i></p>
+                 </li>
+                 <li>
+                     <p>환급액에 대한 제세공과금 환급절차를 알고싶어요<i></i></p>
+                 </li>
+                 <li>
+                     <p>해외 거주 시 결제방법에 대해 알려주세요<i></i></p>
+                 </li>
+             </ul>
+         </div>
+     </div>
+
+     <ul class="nav">
+        <li><a href="#num1" data-scroll>num1</a></li>
+        <li><a href="#num2" data-scroll>num2</a></li>
+        <li><a href="#num3" data-scroll>num3</a></li>
+        <li><a href="#num4" data-scroll>num4</a></li>
+        <li><a href="#num5" data-scroll>num5</a></li>
+        <li><a href="#num6" data-scroll>num6</a></li>
+        <li><a href="#num7" data-scroll>num7</a></li>
+     </ul>
+ </div>
+
+<style type="text/css">
+    @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+    html{height:100%}
+    body{background:#fff;color:#333;font-size:16px;-webkit-text-size-adjust:none;font-family:'Noto Sans KR', sans-serif;}
+    *{margin:0;padding:0;}
+    ul,li{list-style:none;}
+    a{text-decoration:none;color:#333;}
+    em{font-style:normal;}
+
+    .content{width:1300px;margin:0 auto;text-align:center;}
+    section{position:relative;padding:100px 0;background:#f8f8f8;border-bottom:2px solid #000;}
+    section strong{display:none;width:100%;position:absolute;top:250px;left:0;font-size:50px;color:#fff;background:blue;}
+    .video{position:relative;width:100%;height:500px;overflow:hidden;}
+    .video video{width:100%;height:100%;position:absolute;bottom:0;left:0;z-index:0;}
+    .video .bg{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1;}
+    .video strong{z-index:2;}
+    .nav{position:fixed;right:50px;top:50px;}
+    .nav li{width:100px;margin-bottom:10px;background:red;}
+
+    /*fadeTxt*/
+    .fadeTxt{position:relative;font-size:40px;text-align:center;letter-spacing:-2px;line-height:1.3;color:#000;z-index:1;}
+    .fadeTxt:after{content:'';display:inline-block;width:65px;height:19px;position:absolute;bottom:0;left:50%;margin-left:-32.5px;background:url("https://gscdn.hackers.co.kr/star/img/common/sp_main.png") no-repeat -105px -21px;}
+    .fadeTxt.green:after{background-position-y:0;}
+    .fadeTxt.img:after{content:none;}
+
+    /*scroll Magic*/
+    #pinContainer{position:relative;width:1000px;height:500px;margin:0 auto;overflow:hidden;}
+    .panel{height:100%;width:100%;position:absolute;}
+    .panel b{color:#000;font-size:30px;text-align:center;}
+    .blue{background-color:#3883d8;}
+    .turqoise{background-color:#38ced7;}
+    .bordeaux{background-color:#953543;}
+    .green{background-color:#22d659;}
+
+    /*teacher-wrap*/
+    .teacher-wrap{position:relative;width:100%;height:800px;padding-top:200px;overflow:hidden;}
+    .teacher-wrap .left-area{position:relative;width:82.6%;height:600px;background:#000;}
+    .teacher-wrap .left-area .inner-box{width:965px;margin:0 auto;}
+    .teacher-wrap .left-area .inner-box video{width:100%;height:100%;position:absolute;top:0;left:0;z-index:0;}
+    .teacher-wrap .right-area{width:17.4%;height:600px;position:absolute;top:200px;right:0;background:#79c3b8;}
+    .teacher-wrap .right-area .inner-box{position:relative;background:url("https://gscdn.hackers.co.kr/star/img/main/bg_tc.jpg") no-repeat 0 0;}
+    .teacher-wrap .right-area .inner-box:after{content:'';display:block;position:absolute;top:381px;left:717px;width:100vw;height:1px;background:#fff;}
+    .teacher-wrap .right-area .btn-open{display:inline-block;width:70px;height:70px;position:absolute;top:50%;left:15px;margin-top:-35px;background:url("https://gscdn.hackers.co.kr/star/img/main/img_tc_btn.png") no-repeat 0 0;z-index:1;}
+    .teacher-wrap.open .right-area .btn-open{background-position:-70px 0;}
+
+    /*faq-wrap*/
+    .faq-wrap{position:relative;padding-top:70px;background:#01b399;overflow:hidden;}
+    .faq-wrap:before{content:'';display:block;position:absolute;bottom:0;left:0;width:100%;box-shadow:0 0 50px 50px #01b499;z-index:1;}
+    .faq-wrap .inner-box{position:relative;}
+    .faq-wrap .title-wrap{position:absolute;top:-10px;left:0;}
+    .faq-wrap .title-wrap .title-type{color:#fff;}
+    .faq-wrap ul{height:220px;overflow:hidden;}
+    .faq-wrap ul li{width:98%;height:40px;line-height:40px;margin:0 auto;text-align:center;font-size:22px;color:#fff;letter-spacing:-1px;}
+    .faq-wrap ul li p{line-height:50px;}
+    .faq-wrap ul li p i{display:none;}
+    .faq-wrap ul li.on{position:relative;height:80px;line-height:80px;margin:10px auto;font-size:28px;color:#01b499;background:#fff;border-radius:13px;box-shadow:0 7px 15px 1px rgba(0,0,0,0.3);}
+    .faq-wrap ul li.on:after{content:'';display:inline-block;width:14px;height:21px;position:absolute;top:50%;right:30px;margin-top:-10px;background:url("https://gscdn.hackers.co.kr/star/img/common/sp_main.png") no-repeat -74px -74px;}
+    .faq-wrap ul li.on p{display:inline-block;position:relative;line-height:80px;font-weight:bold;}
+    .faq-wrap ul li.on p i{display:block;width:20px;height:20px;background:red;position:absolute;top:-20px;right:-20px;}
+</style>
+ </body>
+</html>
