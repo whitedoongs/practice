@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>고객대응말 폼</title>
+    <style>
+        @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+        html,body,*,div,h1,ul,li{padding: 0;margin: 0;font-family: 'noto sans kr', sans-serif;font-size: 14px;}
+        ul,li{list-style: none;}
+        .wrap{display:grid;grid-template-rows:auto 700px;width: 1050px;margin:80px auto 0;background: #f3fbfe;text-align: center;box-shadow: 0 0 50px 0 rgba(0,0,0,0.2);}
+        .wrap h1{font-size: 32px;color: #0031b6;padding:20px 0;}
+        .tab_wrap{display: grid;grid-template-rows: 40px auto 40px;}
+        .tab_wrap .tab_menu{display:flex;width: 95%;height: 40px;margin:0 auto;background: #fff;box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);}
+        .tab_wrap .tab_menu li{flex:auto;display:flex;justify-content:space-around;align-items: center;cursor:pointer;font-size:15px;}
+        .tab_wrap .tab_menu li.on{color: #0031b6;border-bottom:2px solid #0031b6;}
+        .tab_wrap .tab_cont{width: 95%;margin:30px auto 0;text-align: center;background: #fff;box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);padding:25px;box-sizing: border-box;}
+        .tab_wrap .tab_cont > div{display:none;}
+        .tab_wrap .tab_cont > div.on{display:block;}
+    </style>
+    <script>
+        $(document).ready(function(){
+            //eq를 이용해서 tab 제어
+            // $('.tab_menu li').click(function(){
+            //     var num = $(this).index();
+
+            //     $(this).addClass('on').siblings('li').removeClass('on');
+            //     $('.tab_cont > div').eq(num).addClass('on').siblings('div').removeClass('on');
+            // });
+
+            //id를 이용해서 tab 제어
+            $('.tab_menu li').click(function(){
+                var name = $(this).attr('data-tab');
+
+                $(this).addClass('on').siblings('li').removeClass('on');
+                $("#"+name).addClass('on').siblings('div').removeClass('on');
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Tab Menu</h1>
+        <div class="tab_wrap">
+            <ul class="tab_menu">
+                <li class="on" data-tab="tab1">배송지연</li>
+                <li data-tab="tab2">상품문의</li>
+                <li data-tab="tab3">사이즈문의</li>
+                <li data-tab="tab4">교환&환불문의</li>
+            </ul>
+            <div class="tab_cont">
+                <!--배송지연-->
+                <div class="on" id="tab1">
+                    배송지연
+                </div>
+                <!--//배송지연-->
+                <!--상품문의-->
+                <div id="tab2">
+                    상품문의
+                </div>
+                <!--//상품문의-->
+                <!--사이즈문의-->
+                <div id="tab3">
+                    사이즈문의
+                </div>
+                <!--//사이즈문의-->
+                <!--교환&환불문의-->
+                <div id="tab4">
+                    교환&환불문의
+                </div>
+                <!--//교환&환불문의-->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
